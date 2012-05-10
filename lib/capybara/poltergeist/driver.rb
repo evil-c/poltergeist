@@ -29,7 +29,7 @@ module Capybara::Poltergeist
     end
 
     def client
-      @client ||= Client.start(server.port, inspector, options[:phantomjs])
+      @client ||= Client.start(server.port, inspector, options[:phantomjs], options)
     end
 
     def client_pid

@@ -10,12 +10,13 @@ module Capybara::Poltergeist
       client
     end
 
-    attr_reader :pid, :port, :path, :inspector
+    attr_reader :pid, :port, :path, :inspector, :options
 
-    def initialize(port, inspector = nil, path = nil)
+    def initialize(port, inspector = nil, path = nil, options={})
       @port      = port
       @inspector = inspector
       @path      = path || PHANTOMJS_NAME
+      @options   = options
 
       pid = Process.pid
       at_exit { stop if Process.pid == pid }
@@ -51,6 +52,10 @@ module Capybara::Poltergeist
         if inspector
           parts << "--remote-debugger-port=#{inspector.port}"
           parts << "--remote-debugger-autorun=yes"
+        end
+
+        if options[:cookies_file]
+          parts << "--cookies-file=#{options[:cookies_file]}"
         end
 
         parts << PHANTOMJS_SCRIPT
